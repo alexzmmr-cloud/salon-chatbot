@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Салон красоты — чат</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+</head>
+<body>
+  <div class="chat">
+    <header class="chat__header">Салон красоты — чат-консультант</header>
+
+    <div class="chat__history" id="history"></div>
+
+    <div class="chat__bottom">
+      <div class="chat__actions" id="actions"></div>
+
+      <div class="chat__menu" id="menu"></div>
+
+      <form class="chat__input" id="input-form">
+        <input type="text" id="input-text" placeholder="Введите сообщение..." autocomplete="off" />
+        <button type="submit">Отправить</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
