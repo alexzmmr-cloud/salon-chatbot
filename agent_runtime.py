@@ -2,6 +2,8 @@ import json
 import logging
 from pathlib import Path
 
+import openai
+
 import ai_client
 from agent import tools
 
@@ -179,9 +181,24 @@ def handle_message(session_id: str, text: str) -> dict:
     return result
 
 
+AI_UNAVAILABLE_REPLY = {
+    "text": "ИИ-консультант сейчас недоступен, воспользуйтесь обычным сценарием или оставьте заявку через меню.",
+    "menu": [],
+}
+
+
 def _run_model_loop(session_id: str, history: list[dict]) -> dict:
     for _ in range(MAX_TOOL_STEPS):
-        response = ai_client.chat_completion(history, tools=TOOL_SCHEMAS)
+        try:
+            response = ai_client.chat_completion(history, tools=TOOL_SCHEMAS)
+        except (RuntimeError, openai.OpenAIError):
+            logger.exception("ai_client call failed session=%s", session_id)
+            # Последнее сообщение — вопрос пользователя без ответа модели (иначе
+            # мы бы сюда не попали): убираем его, чтобы история не осталась с
+            # "осиротевшим" user-сообщением на следующий вызов этой сессии.
+            if history and history[-1]["role"] == "user":
+                history.pop()
+            return AI_UNAVAILABLE_REPLY
         message = response.choices[0].message
 
         if not message.tool_calls:
