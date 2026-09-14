@@ -9,7 +9,7 @@ const MAIN_MENU = ["Услуги", "FAQ", "Оставить заявку", "ИИ
 function getSessionId() {
   let sessionId = localStorage.getItem("session_id");
   if (!sessionId) {
-    sessionId = crypto.randomUUID();
+    sessionId = Date.now().toString(36) + Math.random().toString(36).slice(2);
     localStorage.setItem("session_id", sessionId);
   }
   return sessionId;
